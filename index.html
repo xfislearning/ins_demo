@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="KRF Agency Intelligent Risk Snapshot prototype" />
+  <title>KRF Risk Intelligence Prototype</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">KRF</span><span>Risk Intelligence</span></div>
+    <div class="demo-pill">Interactive prototype</div>
+  </header>
+
+  <main class="shell">
+    <aside class="sidebar" aria-label="Prototype modules">
+      <button class="module active" data-module="snapshot"><span>01</span><strong>Risk Snapshot</strong><small>Interactive pilot</small></button>
+      <button class="module" data-module="triggers"><span>02</span><strong>Commercial Triggers</strong><small>Workflow preview</small></button>
+      <button class="module" data-module="changes"><span>03</span><strong>Client Changes</strong><small>Workflow preview</small></button>
+      <div class="boundary"><strong>Human review required</strong><p>AI organizes information and drafts questions. Kirk retains professional judgment.</p></div>
+    </aside>
+
+    <section class="workspace">
+      <div id="snapshot" class="panel active">
+        <div class="panel-head">
+          <div><p class="eyebrow">Module 01</p><h1>Intelligent Risk Snapshot</h1><p>Understand where a business may be exposed to risk before requesting a quote.</p></div>
+          <button id="loadSample" class="ghost">Load sample business</button>
+        </div>
+
+        <div class="progress" aria-label="Form progress"><span class="active"></span><span></span><span></span><span></span></div>
+        <form id="riskForm">
+          <fieldset class="step active" data-step="0">
+            <legend>Business profile</legend>
+            <div class="grid two">
+              <label>Organization name<input name="name" required placeholder="Example: Front Range Youth Services" /></label>
+              <label>Industry<select name="industry" required><option value="">Select one</option><option>Nonprofit</option><option>Professional services</option><option>Manufacturing</option><option>Retail</option><option>Technology</option><option>Other</option></select></label>
+              <label>Employees<select name="employees"><option>1-4</option><option>5-19</option><option>20-49</option><option>50-199</option><option>200+</option></select></label>
+              <label>Operating locations<select name="locations"><option>One location</option><option>Multiple locations in Colorado</option><option>Multiple states</option></select></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="step" data-step="1">
+            <legend>Operations</legend>
+            <p class="hint">Select everything that applies.</p>
+            <div class="checks">
+              <label><input type="checkbox" name="activities" value="Uses business or organization vehicles" /> Business or organization vehicles</label>
+              <label><input type="checkbox" name="activities" value="Works with minors or vulnerable populations" /> Minors or vulnerable populations</label>
+              <label><input type="checkbox" name="activities" value="Relies on volunteers or contractors" /> Volunteers or contractors</label>
+              <label><input type="checkbox" name="activities" value="Owns specialized equipment or property" /> Specialized equipment or property</label>
+              <label><input type="checkbox" name="activities" value="Hosts public events or fundraisers" /> Public events or fundraisers</label>
+              <label><input type="checkbox" name="activities" value="Provides professional advice or services" /> Professional advice or services</label>
+            </div>
+          </fieldset>
+
+          <fieldset class="step" data-step="2">
+            <legend>Information and change</legend>
+            <div class="grid two">
+              <label>Information handled<select name="data"><option>Basic contact information</option><option>Customer or donor records</option><option>Financial or payment information</option><option>Health, youth or other sensitive information</option></select></label>
+              <label>Recent change<select name="change"><option>No major change</option><option>Hiring or workforce growth</option><option>New location or state</option><option>New service or program</option><option>New vehicles or equipment</option><option>New contract or major event</option></select></label>
+            </div>
+            <label>What would you most like to understand?<textarea name="concern" rows="4" placeholder="Briefly describe your concern or planned change."></textarea></label>
+          </fieldset>
+
+          <fieldset class="step" data-step="3">
+            <legend>Review and generate</legend>
+            <div id="reviewSummary" class="review-card"></div>
+            <label class="consent"><input type="checkbox" name="confirm" required /> I understand this prototype organizes discussion topics and does not provide insurance or coverage advice.</label>
+          </fieldset>
+
+          <div class="actions"><button type="button" id="back" class="ghost" disabled>Back</button><button type="button" id="next" class="primary">Continue</button></div>
+        </form>
+
+        <section id="report" class="report hidden" aria-live="polite">
+          <div class="report-head"><div><p class="eyebrow">Draft for professional review</p><h2>Business Risk Snapshot</h2></div><button id="printReport" class="ghost">Print / Save PDF</button></div>
+          <div id="reportContent"></div>
+          <div class="report-note"><strong>Next step:</strong> Kirk reviews the facts, confirms information with the client, and decides what requires professional attention.</div>
+          <button id="startOver" class="primary">Start another snapshot</button>
+        </section>
+      </div>
+
+      <div id="triggers" class="panel">
+        <div class="panel-head"><div><p class="eyebrow">Module 02 · Internal weekly workflow</p><h1>Commercial Trigger Intelligence</h1><p>The system gathers public developments automatically. Kirk works through a short review queue and decides what deserves personal outreach.</p></div><button id="runTriggerScan" class="primary">Run weekly scan</button></div>
+        <div class="workflow-steps" id="triggerSteps"><button class="flow-step active"><span>1</span><b>Monitor</b><small>Collect approved sources</small></button><button class="flow-step"><span>2</span><b>Classify</b><small>Extract business changes</small></button><button class="flow-step"><span>3</span><b>Score</b><small>Prioritize relevance</small></button><button class="flow-step"><span>4</span><b>Review</b><small>Kirk decides next action</small></button></div>
+        <div id="triggerEmpty" class="empty-state"><h2>No weekly scan has been run</h2><p>Click <b>Run weekly scan</b> to simulate collection, classification and scoring from approved public sources.</p></div>
+        <div id="triggerResults" class="hidden"><div class="queue-head"><div><h2>Weekly review queue</h2><p>3 signals found · 2 recommended for review</p></div><span class="status">Week of Sep 21</span></div><div class="queue-layout"><div id="triggerList" class="record-list"></div><div id="triggerDetail" class="detail-card"><p class="muted">Select a prospect to inspect its evidence and decide the next action.</p></div></div></div>
+      </div>
+
+      <div id="changes" class="panel">
+        <div class="panel-head"><div><p class="eyebrow">Module 03 · Internal monitoring workflow</p><h1>Client Risk Change Intelligence</h1><p>The system periodically compares approved client baselines with new public or client-supplied information. Kirk confirms changes before updating any official record.</p></div><button id="runClientCheck" class="primary">Check for changes</button></div>
+        <div class="workflow-steps" id="clientSteps"><button class="flow-step active"><span>1</span><b>Baseline</b><small>Load current client facts</small></button><button class="flow-step"><span>2</span><b>Detect</b><small>Find possible changes</small></button><button class="flow-step"><span>3</span><b>Compare</b><small>Show old vs. new</small></button><button class="flow-step"><span>4</span><b>Confirm</b><small>Kirk verifies with client</small></button></div>
+        <div class="control-row"><label>Client<select id="clientSelect"><option value="front-range">Front Range Youth Services</option><option value="precision">Precision Optics Co.</option></select></label><label>Review timing<select id="reviewTiming"><option>Upcoming renewal</option><option>Material change alert</option><option>Annual client review</option></select></label></div>
+        <div id="clientEmpty" class="empty-state"><h2>Ready to compare client information</h2><p>Select a client and click <b>Check for changes</b>. The simulation compares the stored baseline with new approved signals.</p></div>
+        <div id="clientResults" class="hidden"><div class="compare"><div><p class="eyebrow">Previous baseline</p><h3 id="baselineTitle"></h3><p id="baselineText"></p></div><div class="arrow">→</div><div><p class="eyebrow">New signal to confirm</p><h3 id="changeTitle"></h3><p id="changeText"></p></div></div><div class="brief"><div class="queue-head"><h2>Pre-review briefing</h2><span class="status">Needs confirmation</span></div><ul id="clientQuestions"></ul><p class="callout">These are confirmation questions—not coverage conclusions.</p><div class="decision-bar"><button id="markConfirmed" class="primary">Mark confirmed</button><button id="markNotRelevant" class="ghost">Not relevant</button><button id="printBrief" class="ghost">Print briefing</button></div><p id="clientDecision" class="decision-message hidden"></p></div></div>
+      </div>
+    </section>
+  </main>
+  <footer>Prototype prepared by Xiaofang Yang (Sophie), Qentro LLC · xyang@qentrotech.com · qentrotech.com</footer>
+  <script src="app.js"></script>
+</body>
+</html>
